@@ -1,0 +1,10 @@
+<div class="theme-toggle-container">
+  <label class="toggle-switch" title="Переключить тему">
+    <input type="checkbox" [checked]="isDarkTheme" (change)="toggleTheme()">
+    <span class="slider">
+      <span class="icon sun" *ngIf="!isDarkTheme">☀</span>
+      <span class="icon moon" *ngIf="isDarkTheme">☾</span>
+    </span>
+  </label>
+  <span class="theme-label">Переключить тему</span>
+</div>

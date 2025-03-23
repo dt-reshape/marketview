@@ -1,0 +1,71 @@
+<div class="table-wrapper" [ngClass]="{'dark-theme': isDarkTheme}">
+  <div class="controls">
+    <div class="exchange-selector">
+      <label for="exchange">Выберите биржу:</label>
+      <select id="exchange" [(ngModel)]="currentExchange" (change)="switchExchange(currentExchange)">
+        <option value="binance">Binance</option>
+        <option value="bybit">Bybit</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="instruments-table">
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+      <tr>
+        <th class="symbol-col" title="Название инструмента" (click)="sortByColumn('symbol')">
+          Symbol <span class="sort-indicator" *ngIf="currentSortColumn==='symbol'">{{ sortAscending ? '▲' : '▼' }}</span>
+        </th>
+        <th title="Текущая цена (последняя сделка)" (click)="sortByColumn('lastPrice')">
+          Price <span class="sort-indicator" *ngIf="currentSortColumn==='lastPrice'">{{ sortAscending ? '▲' : '▼' }}</span>
+        </th>
+        <th title="Объём торгов за 24 часа в базовой валюте">
+          Volume
+        </th>
+        <th title="Процентное изменение за 24 часа" (click)="sortByColumn('priceChangePercent')">
+          % Change (24h) <span class="sort-indicator" *ngIf="currentSortColumn==='priceChangePercent'">{{ sortAscending ? '▲' : '▼' }}</span>
+        </th>
+        <th title="Максимальная цена за 24 часа" (click)="sortByColumn('highPrice')">
+          High (24h) <span class="sort-indicator" *ngIf="currentSortColumn==='highPrice'">{{ sortAscending ? '▲' : '▼' }}</span>
+        </th>
+        <th title="Минимальная цена за 24 часа" (click)="sortByColumn('lowPrice')">
+          Low (24h) <span class="sort-indicator" *ngIf="currentSortColumn==='lowPrice'">{{ sortAscending ? '▲' : '▼' }}</span>
+        </th>
+      </tr>
+      </thead>
+      <cdk-virtual-scroll-viewport *ngIf="!isLoading; else loading" itemSize="50" class="viewport" (scrolledIndexChange)="onScroll($event)">
+        <tbody>
+        <tr class="virtual-row" *cdkVirtualFor="let ticker of filteredTickers$ | async; trackBy: trackBySymbol">
+          <td class="symbol-col">{{ ticker.symbol }}</td>
+          <td [ngClass]="{'positive': +ticker.priceChangePercent > 0, 'negative': +ticker.priceChangePercent < 0}">
+            {{ ticker.lastPrice | formatNumber:4 }}
+          </td>
+          <td>
+              <span class="volume" [title]="ticker.volumeQuote | formatVolume">
+                {{ ticker.volume | formatVolume }}
+              </span>
+          </td>
+          <td [ngClass]="{'positive': +ticker.priceChangePercent > 0, 'negative': +ticker.priceChangePercent < 0}">
+            {{ ticker.priceChangePercent }}%
+          </td>
+          <td>{{ ticker.highPrice | formatNumber:4 }}</td>
+          <td>{{ ticker.lowPrice | formatNumber:4 }}</td>
+        </tr>
+        </tbody>
+      </cdk-virtual-scroll-viewport>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <app-loader class="loader"></app-loader>
+  </ng-template>
+  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+</div>

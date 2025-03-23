@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --primary-color: #90caf9;
+  --primary-hover-color: #64b5f6;
+}
+
+body.dark-theme {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --primary-color: #1976d2;
+  --primary-hover-color: #1565c0;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}

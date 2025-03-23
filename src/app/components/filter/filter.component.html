@@ -1,0 +1,7 @@
+<div class="filter-container">
+  <input
+    type="text"
+    placeholder="Фильтр по названию инструмента"
+    [(ngModel)]="filterText"
+    (ngModelChange)="onInputChange($event)">
+</div>

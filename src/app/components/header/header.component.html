@@ -1,0 +1,6 @@
+<div class="header">
+  <div class="time-info" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    <span>{{ exchangeTime() }}</span>
+    <span class="tooltip" *ngIf="tooltipServerTime()">{{ exchangeName }}: {{ tooltipServerTime() }}</span>
+  </div>
+</div>
